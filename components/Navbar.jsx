@@ -1,6 +1,6 @@
 "use client";
-import Link from 'next/link';
-import { useState, useEffect } from 'react';
+import Link from "next/link";
+import { useState, useEffect } from "react";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -13,10 +13,17 @@ export default function Navbar() {
     };
 
     handleResize(); // Set initial state
-    window.addEventListener('resize', handleResize); // Update on resize
+    window.addEventListener("resize", handleResize); // Update on resize
 
-    return () => window.removeEventListener('resize', handleResize); // Cleanup listener
+    return () => window.removeEventListener("resize", handleResize); // Cleanup listener
   }, []);
+
+  const handleSearchSubmit = (event) => {
+    event.preventDefault();
+    const searchQuery = event.target.elements[0].value;
+    window.location.href = `/search/${searchQuery}`;
+    // Add your search logic here
+  };
 
   return (
     <header className="bg-gradient-to-b from-[#0f1d16] via-[#0f1d16]/90 to-transparent h-20 sticky top-0 left-0 w-full z-10">
@@ -29,11 +36,13 @@ export default function Navbar() {
           />
         </Link>
         <div className="flex-grow mx-4">
-          <input
-            type="text"
-            placeholder="Search..."
-            className="w-full h-10 p-2 rounded-md bg-white text-black"
-          />
+          <form onSubmit={handleSearchSubmit}>
+            <input
+              type="text"
+              placeholder="Search..."
+              className="w-full h-10 p-2 rounded-md bg-white text-black"
+            />
+          </form>
         </div>
 
         <button
@@ -51,7 +60,9 @@ export default function Navbar() {
               strokeLinecap="round"
               strokeLinejoin="round"
               strokeWidth={2}
-              d={isMenuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"}
+              d={
+                isMenuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"
+              }
             />
           </svg>
         </button>
@@ -96,4 +107,3 @@ export default function Navbar() {
     </header>
   );
 }
-
