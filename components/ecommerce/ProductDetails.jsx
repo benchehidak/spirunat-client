@@ -12,7 +12,7 @@ import { addToWishlist } from "../../redux/action/wishlistAction";
 import ProductTab from "../elements/ProductTab";
 import RelatedSlider from "../sliders/Related";
 import ThumbSlider from "../sliders/Thumb";
-import { useSession } from "next-auth/react";
+// import { useSession } from "next-auth/react";
 
 const ProductDetails = ({
     product,
@@ -25,7 +25,7 @@ const ProductDetails = ({
     quickView,
 }) => {
     const [quantity, setQuantity] = useState(1);
-    const { data: session } = useSession();
+    // const { data: session } = useSession();
     const [productId , setProductId] = useState(0);
 
     useEffect(() => {
@@ -37,16 +37,6 @@ const ProductDetails = ({
     const handleCart = (product) => {
         addToCart(product);
         toast("Product added to Cart !");
-    };
-
-    const handleCompare = (product) => {
-        addToCompare(product);
-        toast("Added to Compare list !");
-    };
-
-    const handleWishlist = (product) => {
-        addToWishlist(product);
-        toast("Added to Wishlist !");
     };
 
     const inCart = cartItems.find((cartItem) => cartItem.id === product.id);
@@ -78,29 +68,19 @@ const ProductDetails = ({
                                     </div>
                                     <div className="col-md-6 col-sm-12 col-xs-12">
                                         <div className="detail-info  pr-30 pl-30">
-                                            {/* <span className="stock-status out-stock"> Sale Off </span> */}
-                                            <h2 className="title-detail">{product.title}</h2>
-                                            {/* <div className="product-detail-rating">
-                                                <div className="product-rate-cover text-end">
-                                                    <div className="product-rate d-inline-block">
-                                                        <div className="product-rating" style={{ width: "90%" }}></div>
-                                                    </div>
-                                                    <span className="font-small ml-5 text-muted"> (32 reviews)</span>
-                                                </div>
-                                            </div> */}
+                                            <h2 className="title-detail text-white">{product.title}</h2>
                                             <div className="clearfix product-price-cover">
                                                 <div className="product-price primary-color float-left">
                                                     <span className="current-price  text-brand">{product.price} TND</span>
                                                     <span>
-                                                        {/* <span className="save-price font-md color3 ml-15">{product.discount?.percentage}% Off</span> */}
                                                         <span className="old-price font-md ml-15">{product.oldPrice ? `$ ${product.oldPrice}` : null}</span>
                                                     </span>
                                                 </div>
                                             </div>
 
-                                            <div className="short-desc mb-30">
+                                            {/* <div className="short-desc mb-30">
                                                 <p className="font-lg">{product.desc}</p>
-                                            </div>
+                                            </div> */}
                                             <div className="bt-1 border-color-1 mt-30 mb-30"></div>
                                             <div className="detail-extralink">
                                                 <div className="detail-qty border radius">
@@ -128,10 +108,6 @@ const ProductDetails = ({
                                                 </div>
                                             </div>
                                             <ul className="product-meta font-xs color-grey mt-50">
-                                                {/* <li className="mb-5">
-                                                    SKU:
-                                                    <a href="#">FWM15VKT</a>
-                                                </li> */}
                                                 <li className="mb-5">
                                                     Tags:{" "}
                                                     {product?.tags?.map((tag, index) => (
@@ -152,17 +128,7 @@ const ProductDetails = ({
 
                                 {quickView ? null : (
                                     <> 
-                                        <ProductTab prodid={productId} />
-                                        {/* <div className="row mt-60">
-                                            <div className="col-12">
-                                                <h3 className="section-title style-1 mb-30">Related products</h3>
-                                            </div>
-                                            <div className="col-12">
-                                                <div className="row related-products position-relative">
-                                                    <RelatedSlider />
-                                                </div>
-                                            </div>
-                                        </div> */}
+                                        <ProductTab product={product} />
                                     </>
                                 )}
                             </div>

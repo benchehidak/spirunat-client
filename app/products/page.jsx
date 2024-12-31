@@ -73,7 +73,7 @@ const Products = ({ products, productFilters, fetchProduct }) => {
   
   return (
     <>
-      <section className="mt-50 mb-50">
+      <section className="mt-50 mb-50 listnone">
         <div className="container mb-30">
           <div className="row flex-col-reverse xl:flex-row-reverse">
             <div className="col-lg-4-5">
@@ -99,7 +99,7 @@ const Products = ({ products, productFilters, fetchProduct }) => {
                   </div>
                 </div>
               </div>
-              <div className="row product-grid ">
+              <div className="row product-grid  ">
                 {getPaginatedProducts.length === 0 && (
                   <h3 className="text-gray-100" >No Products Found </h3>
                 )}

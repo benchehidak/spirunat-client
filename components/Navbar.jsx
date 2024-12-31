@@ -61,7 +61,7 @@ export default function Navbar() {
             isMobile && !isMenuOpen ? "hidden" : "block"
           } md:flex gap-8 absolute md:static bg-[#0f1d16] md:bg-transparent top-20 left-0 w-full md:w-auto p-4 md:p-0 transition-all duration-300`}
         >
-          <Link href="/produits">
+          <Link href="/products">
             <li className="relative flex flex-col items-center justify-center overflow-hidden rounded-lg transition-all duration-300 hover:scale-125 text-white font-bold mt-2">
               Produits
             </li>

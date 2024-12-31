@@ -1,11 +1,12 @@
 import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
 import StoreProvider from "@/components/redux/StoreProvider";
 import StorageWrapper from "@/components/ecommerce/storage-wrapper";
 import Navbar from "@/components/Navbar";
-import "../public/assets/css/main.css";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import "../public/assets/css/main.css";
+import "./globals.css";
+import "swiper/css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

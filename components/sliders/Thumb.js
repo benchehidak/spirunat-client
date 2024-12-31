@@ -28,27 +28,12 @@ const ThumbSlider = ({ product }) => {
                     nextEl: ".custom_next_n",
                 }}
             >
-                {product.gallery.map((item, index) => (
-                    <SwiperSlide key={index}>
-                        <img src={item} />
+                {product.images.map((item, index) => (
+                    <SwiperSlide key={`${index}`}>
+                        <img src={`${process.env.NEXT_PUBLIC_APP_IMAGES_URL}${item}`} />
                     </SwiperSlide>
                 ))}
             </Swiper>
-            {/* <Swiper
-                onSwiper={setThumbsSwiper}
-                
-                spaceBetween={10}
-                slidesPerView={4}
-                freeMode={true}
-                watchSlidesProgress={true}
-                className="mySwiper"
-            >
-                {product.gallery.map((item,index) => (
-                    <SwiperSlide key={index}>
-                        <img src={item.thumb} />
-                    </SwiperSlide>
-                ))}
-            </Swiper> */}
             <div
                 className="slider-arrow slider-arrow-2 carausel-6-columns-arrow"
             >

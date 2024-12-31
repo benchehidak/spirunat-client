@@ -38,9 +38,10 @@ const SingleProduct = ({
     };
     // console.log('product', process.env.NEXTAUTH_URL);
     // console.log('env', process.env.NEXT_PUBLIC_APP_IMAGES_URL);
+    console.log('single product slug', product.slug);
     return (
         <>
-            <div className="product-cart-wrap mb-30">
+            <div className="product-cart-wrap mb-30"  >
                 <div className="product-img-action-wrap">
                     <div className="product-img product-img-zoom">
                         <Link
@@ -100,16 +101,19 @@ const SingleProduct = ({
 
                     <div className="product-card-bottom">
                         <div className="product-price">
-                            <span>{product.price} DT</span>
+                            <span  style={{fontSize: "14px"}} >{product.price}DT</span>
                             <span className="old-price">{product.oldPrice && `$ ${product.oldPrice}`}</span>
                         </div>
-                        <div className="add-cart text-center">
+                        <div className="add-cart text-center " >
                             <a
                                 className="add"
                                 onClick={(e) => handleCart(product)}
+                                style={{display: "flex", justifyContent: "center", alignItems: "center"}}
                             >
                                 <i className="fi-rs-shopping-cart mr-5"></i> 
+                                <span style={{fontSize: "10px"}}>
                                 Ajouter
+                                </span>
                             </a>
                         </div>
                     </div>
