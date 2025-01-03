@@ -14,6 +14,7 @@ const SingleProduct = ({
     addToCompare,
     addToWishlist,
     openQuickView,
+    
 }) => {
     const handleCart = (product) => {
         addToCart(product);
@@ -41,7 +42,7 @@ const SingleProduct = ({
     console.log('single product slug', product.slug);
     return (
         <>
-            <div className="product-cart-wrap mb-30"  >
+            <div className={`product-cart-wrap mb-30 `}  >
                 <div className="product-img-action-wrap">
                     <div className="product-img product-img-zoom">
                         <Link
