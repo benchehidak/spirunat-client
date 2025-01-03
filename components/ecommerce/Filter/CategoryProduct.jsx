@@ -1,62 +1,58 @@
-import { useRouter } from "next/navigation";
 import { connect } from "react-redux";
 import { updateProductCategory } from "../../../redux/action/productFiltersAction";
+import { useEffect, useState, useContext } from "react";
+import axios from "axios";
+import { CategoryContext } from "../../context/CategoryProvider";
 
 const CategoryProduct = ({ updateProductCategory }) => {
-    const router = useRouter();
+  const [categories, setCategories] = useState([]);
+  const { selectedCategory, setSelectedCategory } = useContext(CategoryContext);
 
-    const selectCategory = (e, category) => {
-        e.preventDefault();
-        // removeSearchTerm();
-        updateProductCategory(category);
-        // router.push(
-        //     {
-        //         pathname: "/ecommerce/product",
-        //         query: { category: category },
-        //     },
-        //     undefined,
-        //     { shallow: true }
-        // );
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.post(
+          "/api/categories/getallcategories",
+          {}
+        );
+        setCategories(response.data.categories);
+        console.log("Categories", response.data.categories);
+      } catch (error) {
+        console.log(error);
+      }
     };
-    return (
-        <>
-            <ul>
-                <li onClick={(e) => selectCategory(e, "")}>
-                    <a className="text-white">All</a>
-                </li>
-                <li onClick={(e) => selectCategory(e, "jeans")}>
-                    <a className="text-white">
-                        <img
-                            src="/assets/imgs/theme/icons/category-1.svg"
-                            alt=""
-                        />
-                        Milks & Dairies
-                    </a>
-                    <span className="count">30</span>
-                </li>
-                <li onClick={(e) => selectCategory(e, "shoe")}>
-                    <a className="text-white"> 
-                        <img
-                            src="/assets/imgs/theme/icons/category-2.svg"
-                            alt=""
-                        />
-                        Clothing
-                    </a>
-                    <span className="count">35</span>
-                </li>
-                <li onClick={(e) => selectCategory(e, "jacket")}>
-                    <a className="text-white">
-                        <img
-                            src="/assets/imgs/theme/icons/category-3.svg"
-                            alt=""
-                        />
-                        Pet Foods{" "}
-                    </a>
-                    <span className="count">42</span>
-                </li>                
-            </ul>
-        </>
-    );
+    fetchCategories();
+  }, []);
+
+  //   const selectCategory = (e, category) => {
+  //     e.preventDefault();
+  //     console.log(category);
+  //     updateProductCategory(category);
+
+  //   };
+  const selectCategory = (e, category) => {
+    e.preventDefault();
+    console.log("Category", category);
+    setSelectedCategory(category);
+  };
+
+  return (
+    <>
+      <ul key={"category"}>
+        <li key={"all"} onClick={(e) => selectCategory(e, "")}>
+          <a className="text-white">All</a>
+        </li>
+        {categories.map((category) => (
+          <li
+            key={category.id_cat}
+            onClick={(e) => selectCategory(e, category.id_cat)}
+          >
+            <a className="text-white">{category.nom}</a>
+          </li>
+        ))}
+      </ul>
+    </>
+  );
 };
 
 export default connect(null, { updateProductCategory })(CategoryProduct);

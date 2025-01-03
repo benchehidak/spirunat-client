@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { connect } from "react-redux";
 import ShowSelect from "../../components/ecommerce/Filter/ShowSelect";
 import SortSelect from "../../components/ecommerce/Filter/SortSelect";
@@ -10,13 +10,15 @@ import Pagination from "../../components/ecommerce/Pagination";
 import SingleProduct from "../../components/ecommerce/SingleProduct";
 import { fetchProduct } from "../../redux/action/product";
 import Preloader from "@/components/Layout/loader";
+import { CategoryContext } from "@/components/context/CategoryProvider";
 
 
 const Products = ({ products, productFilters, fetchProduct }) => {
 
-  let searchTerm = "",
-    showLimit = 10,
-    showPagination = 4;
+  let searchTerm = "",showLimit = 10,showPagination = 4;
+
+  const { selectedCategory } = useContext(CategoryContext);
+
 
   let [pagination, setPagination] = useState([]);
   let [limit, setLimit] = useState(showLimit);
@@ -30,14 +32,13 @@ const Products = ({ products, productFilters, fetchProduct }) => {
     setTimeout(() => {
       setLoading(false);
     }, 4000);
-  }, [productFilters, limit, pages, products.items.length]);
+  }, [productFilters ,limit, pages, products.items.length]);
 
   const cratePagination = () => {
     // set pagination
     let arr = new Array(Math.ceil(products.items.length / limit))
       .fill()
       .map((_, idx) => idx + 1);
-
     setPagination(arr);
     setPages(Math.ceil(products.items.length / limit));
   };
@@ -103,19 +104,19 @@ const Products = ({ products, productFilters, fetchProduct }) => {
                 {getPaginatedProducts.length === 0 && (
                   <h3 className="text-gray-100" >No Products Found </h3>
                 )}
-
                 {getPaginatedProducts.map((item, i) => (
                   <div className="col-lg-1-5 col-md-4 col-12 col-sm-6" key={i}>
-                    <SingleProduct product={item} />
-                    {/* <SingleProductList product={item}/> */}
+                    {/* {console.log("Item", item)} 
+                    <SingleProduct product={item} /> */}
+                     {
+                      
+                      selectedCategory === "" || item.categories.includes(selectedCategory) ? <SingleProduct product={item} /> : null
+                    }
                   </div>
                 ))
-                
                 }
-                
                 {}
               </div>
-
               <div className="pagination-area mt-15 mb-sm-5 mb-lg-0">
                 <nav aria-label="Page navigation example">
                   <Pagination
@@ -136,13 +137,12 @@ const Products = ({ products, productFilters, fetchProduct }) => {
               </div>
 
               <div className="sidebar-widget price_range range mb-30 bg-[#1e3f35]">
-                <h5 className="section-title style-1 mb-30 text-gray-100">Fill by price</h5>
+                <h5 className="section-title style-1 mb-30 text-gray-100">Filter by price</h5>
 
                 <div className="price-filter">
                   <div className="price-filter-inner">
                     <br />
                     <PriceRangeSlider />
-
                     <br />
                   </div>
                 </div>
@@ -162,9 +162,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDidpatchToProps = {
-  // openCart,
   fetchProduct,
-  // fetchMoreProduct,
 };
 
 export default connect(mapStateToProps, mapDidpatchToProps)(Products);
