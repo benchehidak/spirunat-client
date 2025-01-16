@@ -8,6 +8,7 @@ import "../public/assets/css/main.css";
 import "./globals.css";
 import "swiper/css";
 import { CategoryProvider } from "@/components/context/CategoryProvider";
+import AuthProvider from "@/components/component/Provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,15 +31,17 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <CategoryProvider>
-        <StoreProvider>
-          <StorageWrapper>
-            <Navbar />
-            {children}
-            <ToastContainer style={{ zIndex: 99999 }} />
-          </StorageWrapper>
-        </StoreProvider>
-        </CategoryProvider>
+        <AuthProvider>
+          <CategoryProvider>
+            <StoreProvider>
+              <StorageWrapper>
+                <Navbar />
+                {children}
+                <ToastContainer style={{ zIndex: 99999 }} />
+              </StorageWrapper>
+            </StoreProvider>
+          </CategoryProvider>
+        </AuthProvider>
       </body>
     </html>
   );

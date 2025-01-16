@@ -1,6 +1,44 @@
-import React from "react";
+"use client";
+import Link from "next/link";
+import React, {useState} from "react";
+import { signIn } from "next-auth/react";
+import { toast } from "react-toastify";
+import { useSession } from 'next-auth/react';
+import { redirect } from "next/navigation";
 
 const LoginComponent = () => {
+  const [data, setData] = useState({
+    email: "",
+    password: "",
+  });
+  const { data: session } = useSession();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await signIn("credentials", {
+        redirect: false,
+        email: data.email,
+        password: data.password,
+      });
+      if (response.error) {
+        toast.error(response.error);
+        return;
+      }
+      toast.success("Connexion réussie");
+      setTimeout(() => {
+        window.location.href = "/";
+      }, 1000);
+
+    } catch (error) {
+      toast.error("Erreur lors de la connexion");
+    }
+  }
+
+  if (session) {
+    redirect("/");
+    return null;
+  }
+
   return (
     <div className="relative flex  flex-col">
       <div className="">
@@ -9,13 +47,10 @@ const LoginComponent = () => {
             <div className="flex flex-col gap-6">
               <div className="rounded-xl border bg-card text-card-foreground shadow overflow-hidden">
                 <div className="grid p-0 md:grid-cols-2 bg-slate-100">
-                  <form className="p-6 md:p-8">
+                  <form className="p-6 md:p-8" onSubmit={handleSubmit}>
                     <div className="flex flex-col gap-6">
                       <div className="flex flex-col items-center text-center">
                         <h1 className="text-2xl font-bold">Se connecter</h1>
-                        {/* <p className="text-balance text-muted-foreground">
-                          Login to your Acme Inc account
-                        </p> */}
                       </div>
                       <div className="grid gap-2">
                         <label
@@ -29,6 +64,8 @@ const LoginComponent = () => {
                           className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
                           id="email"
                           placeholder="m@exemple.com"
+                          value={data.email}
+                          onChange={(e) => setData({...data, email: e.target.value})}
                           required
                         />
                       </div>
@@ -51,6 +88,9 @@ const LoginComponent = () => {
                           type="password"
                           className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
                           id="password"
+                          placeholder="********"
+                          value={data.password}
+                          onChange={(e) => setData({...data, password: e.target.value})}
                           required
                         />
                       </div>
@@ -68,6 +108,7 @@ const LoginComponent = () => {
                       <div className="grid grid-cols-3 gap-4">
                         <button
                           className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border border-input  shadow-sm hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2 w-full"
+                          onClick={() => signIn('google', { callbackUrl : '/' })}
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -83,12 +124,11 @@ const LoginComponent = () => {
                       </div>
                       <div className="text-center text-sm">
                       Pas encore inscrit ? {" "}
-                        <a
-                          href="#"
+                        <Link href="/sign-up"
                           className="underline underline-offset-4"
                         >
                           Créer un compte
-                        </a>
+                        </Link>
                       </div>
                     </div>
                   </form>
@@ -101,11 +141,6 @@ const LoginComponent = () => {
                   </div>
                 </div>
               </div>
-              {/* <div className="text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 hover:[&_a]:text-primary">
-                By clicking continue, you agree to our{" "}
-                <a href="#">Terms of Service</a> and{" "}
-                <a href="#">Privacy Policy</a>.
-              </div> */}
             </div>
           </div>
         </div>

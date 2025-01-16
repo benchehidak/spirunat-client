@@ -1,21 +1,31 @@
 import { NextResponse } from "next/server";
-import { PrismaAdapter } from "@next-auth/prisma-adapter"
 import { PrismaClient } from "@prisma/client"
 import bcrypt from 'bcryptjs';
 
-const prisma = new PrismaClient();
 
 export async function POST(req) {
     const { nom, prenom,email, password } = await req.json();
     const hash = await bcrypt.hash(password,10);
-
-    const newUser = await prisma.User.create({
-        data: {
-            nom,
-            prenom,
-            email,
-            hash,
-        },
-    });
-    return NextResponse.json({success:true});
+    const prisma = new PrismaClient();
+    try
+    {
+        const user = await prisma.util.create({
+            data: {
+                nom: nom,
+                prenom: prenom,
+                email: email,
+                password: hash
+            }
+        });
+        return NextResponse.json({success: true, user});
+    }
+    catch(e)
+    {
+        console.log(e);
+        return NextResponse.json({success: false, error: e.message});
+    }
+    finally
+    {
+        await prisma.$disconnect();
+    }
 }

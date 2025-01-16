@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { FaUser, FaShoppingCart } from "react-icons/fa"; // Import icons
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -31,7 +32,7 @@ export default function Navbar() {
         <Link href="/">
           <img
             src="/assets/images/logo blanc.png"
-            className="h-11 w-32"
+            className="w-32"
             alt="Logo"
           />
         </Link>
@@ -45,27 +46,38 @@ export default function Navbar() {
           </form>
         </div>
 
-        <button
-          className="text-white md:hidden"
-          onClick={() => setIsMenuOpen((prev) => !prev)}
-        >
-          <svg
-            className="w-6 h-6"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d={
-                isMenuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"
-              }
-            />
-          </svg>
-        </button>
+        {isMobile && (
+          <div className="flex items-center gap-4">
+            <Link href="/shop-cart">
+              <div className="text-white hover:scale-125 transition-all duration-300">
+                <FaShoppingCart size={20} />
+              </div>
+            </Link>
+            <button
+              className="text-white md:hidden"
+              onClick={() => setIsMenuOpen((prev) => !prev)}
+            >
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d={
+                    isMenuOpen
+                      ? "M6 18L18 6M6 6l12 12"
+                      : "M4 6h16M4 12h16M4 18h16"
+                  }
+                />
+              </svg>
+            </button>
+          </div>
+        )}
 
         <ul
           className={`${
@@ -75,11 +87,6 @@ export default function Navbar() {
           <Link href="/products">
             <li className="relative flex flex-col items-center justify-center overflow-hidden rounded-lg transition-all duration-300 hover:scale-125 text-white font-bold mt-2">
               Produits
-            </li>
-          </Link>
-          <Link href="/articles">
-            <li className="relative flex flex-col items-center justify-center overflow-hidden rounded-lg transition-all duration-300 hover:scale-125 text-white font-bold mt-2">
-              Articles
             </li>
           </Link>
           <Link href="/expertise">
@@ -97,11 +104,29 @@ export default function Navbar() {
               A propos
             </li>
           </Link>
-          <Link href="/profile">
-            <li className="relative flex flex-col items-center justify-center overflow-hidden rounded-lg transition-all duration-300 hover:scale-125 text-white font-bold">
-              Sign in
-            </li>
-          </Link>
+          {!isMobile && (
+            <>
+              <Link href="/shop-cart">
+                <li className="relative flex flex-col items-center justify-center overflow-hidden rounded-lg transition-all duration-300 hover:scale-125 text-white font-bold mt-2">
+                  <FaShoppingCart size={20} />
+                </li>
+              </Link>
+              <Link href="/login">
+                <li className="relative flex flex-col items-center justify-center overflow-hidden rounded-lg transition-all duration-300 hover:scale-125 text-white font-bold mt-2">
+                  <FaUser size={20} />
+                </li>
+              </Link>
+            </>
+          )}
+          {
+            isMobile && (
+              <Link href="/login">
+                <li className="relative flex flex-col items-center justify-center overflow-hidden rounded-lg transition-all duration-300 hover:scale-125 text-white font-bold mt-2">
+                  Se Connecter
+                </li>
+              </Link>
+            )
+          }
         </ul>
       </div>
     </header>

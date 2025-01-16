@@ -100,12 +100,12 @@ const Products = ({ products, productFilters, fetchProduct }) => {
                   </p>
                 </div>
                 <div className="sort-by-product-area">
-                  <div className="sort-by-cover mr-10">
+                  {/* <div className="sort-by-cover mr-10">
                     <ShowSelect
                       selectChange={selectChange}
                       showLimit={showLimit}
                     />
-                  </div>
+                  </div> */}
                   <div className="sort-by-cover">
                     <SortSelect />
                   </div>

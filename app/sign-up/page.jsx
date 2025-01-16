@@ -1,6 +1,38 @@
-import React from "react";
+"use client";
+import React, {useState} from "react";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const SignupComponent = () => {
+
+  const [data, setData] = useState({
+    nom: "",
+    prenom: "",
+    email: "",
+    password: "",
+    confirmpassword: "",
+  });
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      if (data.password !== data.confirmpassword) {
+        toast.error("Les mots de passe ne correspondent pas");
+        return;
+      }
+      const response = await axios.post("/api/user", data);
+      console.log(response.data);
+      if (response.data.success) {
+        toast.success("Compte créé avec succès");
+      } else {
+        toast.error(response.data.error);
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Erreur lors de la création du compte");
+    }
+  }
+
+
   return (
     <div className="relative flex flex-col">
       <div className="">
@@ -9,7 +41,7 @@ const SignupComponent = () => {
             <div className="flex flex-col gap-6">
               <div className="rounded-xl border bg-card text-card-foreground shadow overflow-hidden">
                 <div className="grid p-0 md:grid-cols-2 bg-slate-100">
-                  <form className="p-6 md:p-8">
+                  <form className="p-6 md:p-8" onSubmit={handleSubmit}> 
                     <div className="flex flex-col gap-6">
                       <div className="flex flex-col items-center text-center">
                         <h1 className="text-2xl font-bold">Créer un compte</h1>
@@ -26,6 +58,8 @@ const SignupComponent = () => {
                           className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
                           id="nom"
                           placeholder="Entrez votre nom"
+                          value={data.nom}
+                          onChange={(e) => setData({...data, nom: e.target.value})}
                           required
                         />
                       </div>
@@ -41,6 +75,8 @@ const SignupComponent = () => {
                           className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
                           id="prenom"
                           placeholder="Entrez votre prénom"
+                          value={data.prenom}
+                          onChange={(e) => setData({...data, prenom: e.target.value})}
                           required
                         />
                       </div>
@@ -56,6 +92,8 @@ const SignupComponent = () => {
                           className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
                           id="email"
                           placeholder="m@exemple.com"
+                          value={data.email}
+                          onChange={(e) => setData({...data, email: e.target.value})}
                           required
                         />
                       </div>
@@ -71,6 +109,8 @@ const SignupComponent = () => {
                           className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
                           id="password"
                           placeholder="Entrez un mot de passe"
+                          value={data.password}
+                          onChange={(e) => setData({...data, password: e.target.value})}
                           required
                         />
                       </div>
@@ -86,6 +126,8 @@ const SignupComponent = () => {
                           className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
                           id="confirmpassword"
                           placeholder="Confirmez votre mot de passe"
+                          value={data.confirmpassword}
+                          onChange={(e) => setData({...data, confirmpassword: e.target.value})}
                           required
                         />
                       </div>
