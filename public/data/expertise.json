@@ -1,0 +1,22 @@
+[
+    {
+      "title": "Une unité de recherche et développement à la pointe",
+      "description": "Notre laboratoire dispose d’une équipe de chercheurs spécialisés dans l’étude des actifs des microalgues, notamment la spiruline, soutenus par des collaborations internationales.",
+      "icon": "mdi:microscope"
+    },
+    {
+      "title": "Des actifs naturels purs et concentrés",
+      "description": "Chez SPIRUNAT, la pureté des ingrédients est primordiale. Nous développons des extraits de spiruline et autres microalgues de qualité exceptionnelle, sans compromis sur la concentration des nutriments.",
+      "icon": "mdi:leaf"
+    },
+    {
+      "title": "Innover pour l'avenir",
+      "description": "Nous croyons que les solutions naturelles sont l'avenir de la santé. Notre engagement en R&D nous permet de créer des compléments alimentaires et des soins cosmétiques efficaces.",
+      "icon": "mdi:lightbulb-on-outline"
+    },
+    {
+      "title": "Un engagement pour l'excellence et la durabilité",
+      "description": "Chaque produit SPIRUNAT est le fruit d'une recherche minutieuse et d'un engagement pour la qualité. Nous perfectionnons nos procédés d’extraction pour garantir la durabilité de nos produits.",
+      "icon": "mdi:shield-check"
+    }
+]

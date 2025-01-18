@@ -1,7 +1,7 @@
 "use client";
 import { connect } from "react-redux";
 import { useState, useEffect, use } from "react";
-// import { useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import axios from "axios";
 
 import {
@@ -32,14 +32,9 @@ const Cart = ({
   };
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-    // setLoading(true);
     setTimeout(() => {
       setLoading(false);
     }, 2000);
-
-    // new WOW.WOW({
-    //     live: false
-    //   }).init()
   }, []);
   // console.log(cartItems);
   const [data, setData] = useState({
@@ -65,13 +60,13 @@ const Cart = ({
       tracking_number: "",
     },
   });
-  // const { data: session } = useSession();
-  const session = false;
+  const { data: session } = useSession();
+  // const session = false;
  
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("test");
-    console.log(data);
+    console.log("data :  ",data);
     try {
       const res = await axios.post("/api/orders/createOrder", data);
       console.log(res);

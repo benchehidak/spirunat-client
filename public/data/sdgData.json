@@ -1,0 +1,28 @@
+[
+    {
+      "title": "Santé et Bien-être (SDG 3)",
+      "description": "Nos formulations à base de spiruline renforcent les défenses naturelles et améliorent la qualité de vie.",
+      "icon": "FaHeartbeat"
+    },
+    {
+      "title": "Production et Consommation Responsables (SDG 12)",
+      "description": "Nous réduisons notre empreinte écologique grâce à des procédés respectueux de l’environnement.",
+      "icon": "FaRecycle"
+    },
+    {
+      "title": "Vie Aquatique et Terrestre (SDG 14 & 15)",
+      "description": "En cultivant des microalgues durablement, nous protégeons les écosystèmes marins et la biodiversité terrestre.",
+      "icon": "FaWater"
+    },
+    {
+      "title": "Énergie Propre et Accessibilité (SDG 7)",
+      "description": "Nous adoptons des technologies réduisant notre consommation énergétique et explorons les énergies renouvelables.",
+      "icon": "FaSolarPanel"
+    },
+    {
+      "title": "Partenariats pour la Réalisation des Objectifs (SDG 17)",
+      "description": "Nous collaborons avec des instituts et des organisations pour promouvoir des solutions de santé durables.",
+      "icon": "FaHandsHelping"
+    }
+  ]
+  

@@ -1,11 +1,13 @@
 "use client";
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { FaUser, FaShoppingCart } from "react-icons/fa"; // Import icons
+import { FaUser, FaShoppingCart } from "react-icons/fa"; 
+import { useSession } from "next-auth/react";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const { data: session } = useSession();
 
   useEffect(() => {
     const handleResize = () => {
@@ -111,7 +113,9 @@ export default function Navbar() {
                   <FaShoppingCart size={20} />
                 </li>
               </Link>
-              <Link href="/login">
+              <Link 
+              href={session ? "/account/1" : "/login"}
+              >
                 <li className="relative flex flex-col items-center justify-center overflow-hidden rounded-lg transition-all duration-300 hover:scale-125 text-white font-bold mt-2">
                   <FaUser size={20} />
                 </li>
@@ -120,7 +124,9 @@ export default function Navbar() {
           )}
           {
             isMobile && (
-              <Link href="/login">
+              <Link 
+              href={session ? "/account/1" : "/login"}
+              >
                 <li className="relative flex flex-col items-center justify-center overflow-hidden rounded-lg transition-all duration-300 hover:scale-125 text-white font-bold mt-2">
                   Se Connecter
                 </li>

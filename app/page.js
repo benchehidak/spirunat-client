@@ -1,31 +1,16 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import { Container, CircularProgress } from '@mui/material';
-import ProductGrid from '../components/ProductGrid';
+import Expertise from '@/components/Expertise';
+import ExpertiseData from '@/public/data/expertise.json';
+import Durabilite from '@/components/durabiliteHomeSection';
+// import Timeline from '@/components/timeline';
+import AboutSection from '@/components/About';
 
 export default function Home() {
   const [listings, setListings] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  // useEffect(() => {
-  //   const fetchListings = async () => {
-  //     try {
-  //       const response = await fetch('http://localhost:3000/api/listing/');
-  //       const data = await response.json();
-  //       if (Array.isArray(data.listings)) {
-  //         setListings(data.listings);
-  //       } else {
-  //         console.error('Unexpected response format:', data);
-  //       }
-  //     } catch (error) {
-  //       console.error('Error fetching listings:', error);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-
-  //   fetchListings();
-  // }, []);
 
   if (loading) {
     return (
@@ -61,7 +46,7 @@ export default function Home() {
 
         <div className="mt-12">
           <h2 className="text-3xl font-semibold text-gray-900 dark:text-white text-center">Nos gammes</h2>
-          <div className="py-4 mt-4 sm:flex justify-center space-x-24">
+          <div className="py-4 mt-4 sm:flex justify-center sm:space-x-24">
             <span className="relative flex flex-col items-center justify-center overflow-hidden rounded-lg transition-all duration-300 hover:scale-125">
               <img src="/assets/images/icons/sport.png" alt="Sport logo" className="h-28 w-28 relative z-0 rounded-lg" />
               <span className="mt-2 text-xl font-semibold text-white text-center">Sport</span>
@@ -77,15 +62,21 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="mt-12">
+        {/* <div className="mt-12">
           <h2 className="text-3xl font-semibold text-gray-900 dark:text-white text-center">Meilleurs produits</h2>
           <div className="flex flex-wrap justify-center gap-6">
-            {/* {listings.map((listing) => (
+            {listings.map((listing) => (
               <ProductCard key={listing.id} product={listing} />
-            ))} */}
+            ))}
             <ProductGrid/>
           </div>
-        </div>
+        </div> */}
+        <Expertise
+        data={ExpertiseData}
+        />
+        <Durabilite/>
+        {/* <Timeline/> */}
+        <AboutSection/>
       </Container>
     </div>
   );
