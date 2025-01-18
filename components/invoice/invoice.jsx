@@ -5,7 +5,7 @@ export default function Invoice({order}) {
     console.log(order.products,"order");
 
   return (
-    <div className="tm_container">
+    <div className="tm_container listnone">
         <div className="tm_pos_invoice_wrap" id="tm_download_section">
             <div className="tm_pos_invoice_top">
                 <div className="tm_pos_company_logo">
