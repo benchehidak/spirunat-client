@@ -91,17 +91,17 @@ export default function Navbar() {
               Produits
             </li>
           </Link>
-          <Link href="/expertise">
+          <Link href="/#expertise">
             <li className="relative flex flex-col items-center justify-center overflow-hidden rounded-lg transition-all duration-300 hover:scale-125 text-white font-bold mt-2">
               Expertise
             </li>
           </Link>
-          <Link href="/durabilite">
+          <Link href="/#sdgs">
             <li className="relative flex flex-col items-center justify-center overflow-hidden rounded-lg transition-all duration-300 hover:scale-125 text-white font-bold mt-2">
               Durabilité
             </li>
           </Link>
-          <Link href="/about">
+          <Link href="/#about">
             <li className="relative flex flex-col items-center justify-center overflow-hidden rounded-lg transition-all duration-300 hover:scale-125 text-white font-bold mt-2">
               A propos
             </li>
