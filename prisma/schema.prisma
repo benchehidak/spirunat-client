@@ -124,6 +124,7 @@ model Product {
   tags          String[]  @default([])
   sizes         String[]  @default([])
   stock         Int       @default(0)
+  sold          Int       @default(0)
   review        Int?      @default(0)
   rating        Int[]     @default([])
   ratingScore   Float?
@@ -205,4 +206,12 @@ model Admin {
   user     String @unique
   password String
   adminlvl Int
+}
+
+model ResetToken {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   @db.ObjectId
+  token     String   @unique
+  expiresAt DateTime
+  @@index([userId])
 }

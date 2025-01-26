@@ -80,6 +80,7 @@ export default function Home() {
         <Durabilite />
         <AboutSection />
       </Container>
+
     </div>
   );
 }

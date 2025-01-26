@@ -92,6 +92,33 @@ export async function POST(req)  {
 
     try {
         console.log("Creating order with data:", body);
+        for (let i = 0; i < body.products.length; i++) {
+            const product = await prisma.product.findUnique({
+                where: {
+                    id: body.products[i].idProd,
+                },
+                select: {
+                    stock: true,
+                    sold: true,
+                },
+            });
+        
+            if (product && body.products[i].qte < (product.stock - product.sold)) {
+                await prisma.product.update({
+                    where: {
+                        id: body.products[i].idProd,
+                    },
+                    data: {
+                        sold: {
+                            increment: body.products[i].qte,
+                        },
+                    },
+                });
+            } else {
+                console.log(`Insufficient stock for product ID: ${body.products[i].idProd}`);
+                return NextResponse.json({ success: false, error: `Insufficient stock for product ID: ${body.products[i].idProd}` });
+            }
+        }
         const order = await prisma.order.create({
             data: {
                 idUser: body.user,

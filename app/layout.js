@@ -9,6 +9,7 @@ import "./globals.css";
 import "swiper/css";
 import { CategoryProvider } from "@/components/context/CategoryProvider";
 import AuthProvider from "@/components/component/Provider";
+import Footer from "@/components/footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -38,6 +39,7 @@ export default function RootLayout({ children }) {
                 <Navbar />
                 {children}
                 <ToastContainer style={{ zIndex: 99999 }} />
+                <Footer />
               </StorageWrapper>
             </StoreProvider>
           </CategoryProvider>
