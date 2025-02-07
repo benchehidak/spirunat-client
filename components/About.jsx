@@ -35,8 +35,8 @@ export default function TimelineSection() {
       <div className="container mx-auto px-6 lg:px-20">
         {/* Header */}
         <div className="text-center text-white mb-16">
-          <h2 className="text-4xl md:text-5xl font-extrabold mb-4">
-            LES LABORATOIRES <span className="text-[#1e3f35]">SPIRUNAT</span>
+          <h2 className="text-4xl md:text-5xl font-extrabold mb-4 text-slate-100">
+            LES LABORATOIRES <span className="text-slate-100">SPIRUNAT</span>
           </h2>
           <p className="text-lg md:text-xl">
             L'énergie de la nature, au service de votre bien-être
@@ -97,7 +97,7 @@ export default function TimelineSection() {
 
         {/* Values Section */}
         <div className="mt-24 text-white text-center">
-          <h3 className="text-3xl font-bold mb-8">Nos Valeurs Fondamentales</h3>
+          <h3 className="text-3xl font-bold mb-8 text-slate-100">Nos Valeurs Fondamentales</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
               "Innovation continue pour un avenir plus sain",

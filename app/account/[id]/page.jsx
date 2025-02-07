@@ -88,7 +88,7 @@ function Account({params}) {
                                                     <a className={activeIndex == 2 ? "nav-link active" : "nav-link"} onClick={() => handleOnClick(1)}><i className="fi-rs-settings-sliders mr-10"></i>Dashboard</a>
                                                 </li> */}
                                                 <li className="nav-item list-none">
-                                                    <a className={activeIndex == 1 ? "nav-link active" : "nav-link"}  onClick={() => handleOnClick(2)}><i className="fi-rs-shopping-bag mr-10"></i>Orders</a>
+                                                    <a className={activeIndex == 1 ? "nav-link active" : "nav-link"}  onClick={() => handleOnClick(2)}><i className="fi-rs-shopping-bag mr-10"></i>Commandes</a>
                                                 </li>
                                                 {/* <li className="nav-item">
                                                     <a className={activeIndex == 3 ? "nav-link active" : "nav-link"}  onClick={() => handleOnClick(3)}><i className="fi-rs-shopping-cart-check mr-10"></i>Track Your Order</a>
@@ -100,13 +100,13 @@ function Account({params}) {
                                                     <a className={activeIndex == 5 ? "nav-link active" : "nav-link"}  onClick={() => handleOnClick(5)}><i className="fi-rs-user mr-10"></i>Account details</a>
                                                 </li> */}
                                                 <li className="nav-item list-none">
-                                                    <div onClick={()=> signOut()}><div className="nav-link"><i className="fi-rs-sign-out mr-10"></i>Logout</div></div>
+                                                    <div onClick={()=> signOut()}><div className="nav-link"><i className="fi-rs-sign-out mr-10"></i>Se deconnecter</div></div>
                                                 </li>
                                             </ul>
                                         </div>
                                     </div>
-                                    <div className="col-md-9">
-                                        <div className="tab-content account dashboard-content pl-50">
+                                    <div className="col-md-9 mt-10 xl:mt-0">
+                                        <div className="tab-content account dashboard-content xl:pl-50">
                                             <div className={activeIndex == 2 ? "tab-pane fade active show" : "tab-pane fade "} >
                                                 <div className="card">
                                                     <div className="card-header">
@@ -123,16 +123,16 @@ function Account({params}) {
                                             <div className={activeIndex == 1 ? "tab-pane fade active show" : "tab-pane fade "} >
                                                 <div className="card">
                                                     <div className="card-header">
-                                                        <h3 className="mb-0">Your Orders</h3>
+                                                        <h3 className="mb-0">Vos commandes</h3>
                                                     </div>
                                                     <div className="card-body">
                                                         <div className="table-responsive">
                                                             <table className="table">
                                                                 <thead>
                                                                     <tr>
-                                                                        <th>Order</th>
+                                                                        <th>Commande</th>
                                                                         <th>Date</th>
-                                                                        <th>Status</th>
+                                                                        <th>Statut</th>
                                                                         <th>Total</th>
                                                                         <th>Actions</th>
                                                                     </tr>
@@ -144,10 +144,10 @@ function Account({params}) {
                                                                             <td>{new Date(order.createdAt).toLocaleDateString()}</td>
                                                                             <td>{order.status}</td>
                                                                             <td>{order.totalAmount }</td>
-                                                                            <td><Link href={`/account/invoice/${order.id}`}>View</Link></td>
+                                                                            <td><Link href={`/account/invoice/${order.id}`}>Plus</Link></td>
                                                                         </tr>
                                                                     
-                                                                    )) : <tr><td colSpan="5">No orders found</td></tr>}
+                                                                    )) : <tr><td colSpan="5">Vous n'avez aucune commande</td></tr>}
 
                                                                 </tbody>
                                                             </table>
