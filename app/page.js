@@ -23,12 +23,12 @@ export default function Home() {
       <Container className="bg-slate-200 p-8 rounded-lg shadow-xl max-w-6xl mt-0 mb-10 bg-opacity-0">
         <div className="text-center mb-10 mt-0">
           {/* <div className="w-[300px] h-[50px] bg-blue-500 border-2 border-black absolute top-20 right-6"></div> */}
-          <h1 className="text-gray-900 font-bold text-5xl md:text-6xl xl:text-7xl">
+          <h1 className=" text-white font-bold text-5xl md:text-6xl xl:text-7xl">
             L'énergie de la nature,
             <br /> au service de votre bien-être
-            <span className="text-primary "></span>
+            <span className="text-primary text-white"></span>
           </h1>
-          <p className="mt-14 text-gray-700 text-lg font-medium leading-relaxed">
+          <p className="mt-14  text-gray-300 text-lg font-medium leading-relaxed">
             Chez les Laboratoires Spirunat, nous vous proposons de la spiruline
             de haute qualité, riche en nutriments essentiels pour soutenir votre
             santé et votre énergie. Découvrez notre gamme de produits bio 100 %
@@ -40,7 +40,7 @@ export default function Home() {
         </div>
 
         <div className="mt-12">
-          <h2 className="text-3xl font-semibold text-gray-900  text-center">
+          <h2 className="text-3xl font-semibold  text-white text-center">
             Nos gammes
           </h2>
           <div className="py-4 mt-4 sm:flex justify-center sm:space-x-24">
