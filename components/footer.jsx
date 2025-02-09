@@ -61,7 +61,7 @@ export default function Footer() {
               href="/shop-cart"
             >
               {" "}
-              Pannier{" "}
+              Panier{" "}
             </Link>
           </li>
 

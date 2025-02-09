@@ -102,8 +102,13 @@ export async function POST(req)  {
                     sold: true,
                 },
             });
+            console.log("requested quantity: ", body.products[i].qte);
+                console.log("stock: ", product.stock);
+                console.log("sold: ", product.sold);
+                console.log("new stock: ", product.stock - product.sold - body.products[i].qte);
         
-            if (product && body.products[i].qte < (product.stock - product.sold)) {
+            if (product && (body.products[i].qte <= (product.stock - product.sold))) {
+                
                 await prisma.product.update({
                     where: {
                         id: body.products[i].idProd,
@@ -116,7 +121,7 @@ export async function POST(req)  {
                 });
             } else {
                 console.log(`Insufficient stock for product ID: ${body.products[i].idProd}`);
-                return NextResponse.json({ success: false, error: `Insufficient stock for product ID: ${body.products[i].idProd}` });
+                return NextResponse.json({ success: false, error: `Stock insuffisant` });
             }
         }
         const order = await prisma.order.create({

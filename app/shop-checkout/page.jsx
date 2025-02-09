@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { useState, useEffect, use } from "react";
 import { useSession } from "next-auth/react";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 import {
   clearCart,
@@ -72,10 +73,28 @@ const Cart = ({
       console.log(res);
       if (res.data.success) {
         clearCart();
-        alert("Order Created Successfully");
+        // alert("Order Created Successfully");
+        toast.success("Commande cree avec succes", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined
+        });
       }
       else {
-        alert("Error creating order");
+        // alert("Error creating order");
+        toast.error("Erreur lors de la creation de la commande", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined
+        });
       }
     }
     catch (err) {
@@ -106,9 +125,9 @@ const Cart = ({
                 <h1 className="heading-2 mb-10 text-white">Check-out</h1>
                 <div className="d-flex justify-content-between">
                   <h6 className="text-body">
-                    There are{" "}
+                    Il y a{" "}
                     <span className="text-brand">{cartItems.length}</span>{" "}
-                    products in your cart
+                    dans votre panier
                   </h6>
                 </div>
               </div>
