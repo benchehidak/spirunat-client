@@ -100,7 +100,7 @@ const LoginComponent = () => {
                       >
                         Se connecter
                       </button>
-                      <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
+                      {/* <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
                         <span className="relative z-10  px-2 text-muted-foreground">
                           Ou continuez avec
                         </span>
@@ -121,7 +121,7 @@ const LoginComponent = () => {
                           </svg>
                           <span className="sr-only">Login with Google</span>
                         </button>
-                      </div>
+                      </div> */}
                       <div className="text-center text-sm">
                       Pas encore inscrit ? {" "}
                         <Link href="/sign-up"

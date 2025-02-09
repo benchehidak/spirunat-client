@@ -137,7 +137,7 @@ const SignupComponent = () => {
                       >
                         S'inscrire
                       </button>
-                      <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
+                      {/* <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
                         <span className="relative z-10 px-2 text-muted-foreground">
                           Ou continuez avec
                         </span>
@@ -157,7 +157,7 @@ const SignupComponent = () => {
                           </svg>
                           <span className="sr-only">S'inscrire avec Google</span>
                         </button>
-                      </div>
+                      </div> */}
                       <div className="text-center text-sm">
                         Déjà inscrit ?{" "}
                         <a href="#" className="underline underline-offset-4">
