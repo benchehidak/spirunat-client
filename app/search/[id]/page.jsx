@@ -72,9 +72,9 @@ const Products = ({ products, productFilters, fetchProduct, params }) => {
               <div className="shop-product-fillter">
                 <div className="totall-product">
                   <p>
-                    We found{" "}
+                    Il y a{" "}
                     <strong className="text-brand">{products.items.length}</strong>{" "}
-                    items for you!
+                    produits!
                   </p>
                 </div>
                 <div className="sort-by-product-area">

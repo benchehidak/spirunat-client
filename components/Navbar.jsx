@@ -128,7 +128,7 @@ export default function Navbar() {
               href={session ? "/account/1" : "/login"}
               >
                 <li className="relative flex flex-col items-center justify-center overflow-hidden rounded-lg transition-all duration-300 hover:scale-125 text-white font-bold mt-2">
-                  Se Connecter
+                {session ? "Compte" : "Se connecter"}
                 </li>
               </Link>
             )

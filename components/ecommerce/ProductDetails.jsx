@@ -107,7 +107,7 @@ const ProductDetails = ({
                                                     
                                                 </div>
                                             </div>
-                                            <ul className="product-meta font-xs color-grey mt-50">
+                                            {/* <ul className="product-meta font-xs color-grey mt-50">
                                                 <li className="mb-5">
                                                     Tags:{" "}
                                                     {product?.tags?.map((tag, index) => (
@@ -121,7 +121,7 @@ const ProductDetails = ({
                                                     Disponibilité:
                                                     <span className="in-stock text-success ml-5">{product.stock} En Stock</span>
                                                 </li>
-                                            </ul>
+                                            </ul> */}
                                         </div>
                                     </div>
                                 </div>
