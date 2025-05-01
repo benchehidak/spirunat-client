@@ -38,12 +38,15 @@ const Cart = ({
     }, 2000);
   }, []);
   // console.log(cartItems);
+  const { data: session } = useSession();
+  // const session = false;
   const [data, setData] = useState({
     user: "",
     fname: "",
     lname: "",
+    email: "", 
+    phone: "", // Add phone field to data state
     products: [],
-
     totalAmount: price(),
     deliveryAdress: {
       street: "",
@@ -61,19 +64,50 @@ const Cart = ({
       tracking_number: "",
     },
   });
-  const { data: session } = useSession();
-  // const session = false;
+  
+  // Update useEffect to set email from session when session changes
+  useEffect(() => {
+    if (session && session.user) {
+      setData({
+        ...data,
+        user: session.user.id,
+        email: session.user.email // Get email from session
+      });
+    }
+  }, [session]);
  
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("test");
-    console.log("data :  ",data);
+    
+    // Check if cart is empty
+    if (cartItems.length === 0) {
+      toast.error("Votre panier est vide. Veuillez ajouter des produits avant de passer commande.", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined
+      });
+      return; // Stop execution if cart is empty
+    }
+    
+    // Ensure email is included from session if available
+    const orderData = {
+      ...data,
+      email: data.email || (session?.user?.email || ""),
+      user: session?.user?.id || "",
+      totalAmount: price()
+    };
+    
+    console.log("Submitting order data:", orderData);
+    
     try {
-      const res = await axios.post("/api/orders/createOrder", data);
+      const res = await axios.post("/api/orders/createOrder", orderData);
       console.log(res);
       if (res.data.success) {
         clearCart();
-        // alert("Order Created Successfully");
         toast.success("Commande cree avec succes", {
           position: "top-right",
           autoClose: 5000,
@@ -85,7 +119,6 @@ const Cart = ({
         });
       }
       else {
-        // alert("Error creating order");
         toast.error("Erreur lors de la creation de la commande", {
           position: "top-right",
           autoClose: 5000,
@@ -99,8 +132,16 @@ const Cart = ({
     }
     catch (err) {
       console.log(err);
+      toast.error("Erreur: " + (err.response?.data?.error || err.message), {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined
+      });
     }
-
   }
   useEffect(() => {
     setData({
@@ -241,7 +282,7 @@ const Cart = ({
                       name="fname"
                       placeholder="First name *"
                       value={data.fname}
-                      onChange={(e) => setData({ ...data, fname: e.target.value, user: session?.user.id, totalAmount: price()})}
+                      onChange={(e) => setData({ ...data, fname: e.target.value, user: session?.user.id, email: data.email , totalAmount: price()})}
                     />
                   </div>
                   <div className="form-group">
@@ -252,6 +293,16 @@ const Cart = ({
                       placeholder="Last name *"
                       value={data.lname}
                       onChange={(e) => setData({ ...data, lname: e.target.value })}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <input
+                      required=""
+                      type="tel"
+                      name="phone"
+                      placeholder="Phone number *"
+                      value={data.phone}
+                      onChange={(e) => setData({ ...data, phone: e.target.value })}
                     />
                   </div>
                   {/* <div className="form-group">
