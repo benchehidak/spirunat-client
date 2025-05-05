@@ -31,7 +31,18 @@ const Cart = ({
 
     return price;
   };
+
+  const shippingCost = () => {
+    const subtotal = price();
+    return subtotal > 150 ? 0 : 7;
+  };
+
+  const totalWithShipping = () => {
+    return price() + shippingCost();
+  };
+
   const [loading, setLoading] = useState(true);
+  const [errors, setErrors] = useState({});
   useEffect(() => {
     setTimeout(() => {
       setLoading(false);
@@ -47,7 +58,7 @@ const Cart = ({
     email: "", 
     phone: "", // Add phone field to data state
     products: [],
-    totalAmount: price(),
+    totalAmount: totalWithShipping(),
     deliveryAdress: {
       street: "",
       city: "",
@@ -59,7 +70,7 @@ const Cart = ({
     deliveryInfo: {
       deliveryDate: "",
       deliveryTime: "",
-      deliveryFee: 0.0,
+      deliveryFee: shippingCost(),
       delivery_carrier: "",
       tracking_number: "",
     },
@@ -75,7 +86,132 @@ const Cart = ({
       });
     }
   }, [session]);
- 
+
+  // Validation functions
+  const validateName = (name) => {
+    return name.trim().length >= 2;
+  };
+  
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+  
+  const validatePhone = (phone) => {
+    // Tunisian phone number (8 digits, may start with +216 or not)
+    const phoneRegex = /^(\+216)?[0-9]{8}$/;
+    return phoneRegex.test(phone.replace(/\s/g, ''));
+  };
+  
+  const validateAddress = (address) => {
+    return address.trim().length >= 5;
+  };
+  
+  const validatePostalCode = (code) => {
+    // Tunisian postal code (4 digits)
+    const postalRegex = /^[0-9]{4}$/;
+    return postalRegex.test(code.trim());
+  };
+  
+  // Input change handler with validation
+  const handleInputChange = (e, field) => {
+    const value = e.target.value;
+    let isValid = true;
+    let errorMsg = "";
+    
+    // Validate based on field type
+    switch (field) {
+      case 'fname':
+      case 'lname':
+        isValid = validateName(value);
+        errorMsg = isValid ? "" : "Nom doit contenir au moins 2 caractères";
+        setErrors({...errors, [field]: errorMsg});
+        setData({...data, [field]: value});
+        break;
+        
+      case 'email':
+        isValid = validateEmail(value);
+        errorMsg = isValid ? "" : "Email invalide";
+        setErrors({...errors, email: errorMsg});
+        setData({...data, email: value});
+        break;
+        
+      case 'phone':
+        isValid = validatePhone(value);
+        errorMsg = isValid ? "" : "Le numéro doit contenir 8 chiffres";
+        setErrors({...errors, phone: errorMsg});
+        setData({...data, phone: value});
+        break;
+        
+      case 'street':
+        isValid = validateAddress(value);
+        errorMsg = isValid ? "" : "Adresse trop courte";
+        setErrors({...errors, street: errorMsg});
+        setData({
+          ...data,
+          deliveryAdress: {
+            ...data.deliveryAdress,
+            street: value,
+          }
+        });
+        break;
+        
+      case 'city':
+      case 'state':
+        isValid = validateName(value);
+        errorMsg = isValid ? "" : "Nom de ville/région invalide";
+        setErrors({...errors, [field]: errorMsg});
+        setData({
+          ...data,
+          deliveryAdress: {
+            ...data.deliveryAdress,
+            [field]: value,
+          }
+        });
+        break;
+        
+      case 'zipCode':
+        isValid = validatePostalCode(value);
+        errorMsg = isValid ? "" : "Code postal doit être 4 chiffres";
+        setErrors({...errors, zipCode: errorMsg});
+        setData({
+          ...data,
+          deliveryAdress: {
+            ...data.deliveryAdress,
+            zipCode: value,
+          }
+        });
+        break;
+        
+      default:
+        setData({...data, [field]: value});
+    }
+  };
+
+  // Form validation before submit
+  const validateForm = () => {
+    const newErrors = {};
+    
+    // Validate all fields
+    if (!validateName(data.fname)) newErrors.fname = "Prénom invalide";
+    if (!validateName(data.lname)) newErrors.lname = "Nom invalide";
+    if (!validatePhone(data.phone)) newErrors.phone = "Numéro de téléphone invalide";
+    if (!validateAddress(data.deliveryAdress.street)) newErrors.street = "Adresse invalide";
+    if (!validateName(data.deliveryAdress.city)) newErrors.city = "Ville invalide";
+    if (!validateName(data.deliveryAdress.state)) newErrors.state = "Région invalide";
+    if (!validatePostalCode(data.deliveryAdress.zipCode)) newErrors.zipCode = "Code postal invalide";
+    
+    // Email validation (optional if taken from session)
+    if (!data.email && (!session || !session.user?.email)) {
+      newErrors.email = "Email requis";
+    } else if (data.email && !validateEmail(data.email)) {
+      newErrors.email = "Email invalide";
+    }
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     
@@ -93,12 +229,26 @@ const Cart = ({
       return; // Stop execution if cart is empty
     }
     
-    // Ensure email is included from session if available
+    // Validate form before submission
+    if (!validateForm()) {
+      toast.error("Veuillez corriger les erreurs dans le formulaire", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined
+      });
+      return;
+    }
+    
+    // Ensure email is included from session if available and update shipping and total
     const orderData = {
       ...data,
       email: data.email || (session?.user?.email || ""),
       user: session?.user?.id || "",
-      totalAmount: price()
+      totalAmount: totalWithShipping(),
     };
     
     console.log("Submitting order data:", orderData);
@@ -152,6 +302,11 @@ const Cart = ({
         qte: item.quantity,
         price: item.price,
       })),
+      totalAmount: totalWithShipping(),
+      deliveryInfo: {
+        ...data.deliveryInfo,
+        deliveryFee: shippingCost()
+      }
     });
   }
   , [cartItems]);
@@ -278,277 +433,109 @@ const Cart = ({
                   <div className="form-group">
                     <input
                       type="text"
-                      required=""
+                      required
                       name="fname"
                       placeholder="First name *"
                       value={data.fname}
-                      onChange={(e) => setData({ ...data, fname: e.target.value, user: session?.user.id, email: data.email , totalAmount: price()})}
+                      maxLength={50}
+                      onChange={(e) => handleInputChange(e, 'fname')}
+                      className={errors.fname ? "is-invalid" : ""}
                     />
+                    {errors.fname && <div className="invalid-feedback">{errors.fname}</div>}
                   </div>
                   <div className="form-group">
                     <input
                       type="text"
-                      required=""
+                      required
                       name="lname"
                       placeholder="Last name *"
                       value={data.lname}
-                      onChange={(e) => setData({ ...data, lname: e.target.value })}
+                      maxLength={50}
+                      onChange={(e) => handleInputChange(e, 'lname')}
+                      className={errors.lname ? "is-invalid" : ""}
                     />
+                    {errors.lname && <div className="invalid-feedback">{errors.lname}</div>}
                   </div>
                   <div className="form-group">
                     <input
-                      required=""
+                      required
                       type="tel"
                       name="phone"
                       placeholder="Phone number *"
                       value={data.phone}
-                      onChange={(e) => setData({ ...data, phone: e.target.value })}
+                      maxLength={12}
+                      onChange={(e) => handleInputChange(e, 'phone')}
+                      className={errors.phone ? "is-invalid" : ""}
                     />
+                    {errors.phone && <div className="invalid-feedback">{errors.phone}</div>}
                   </div>
-                  {/* <div className="form-group">
-                    <input
-                      required=""
-                      type="text"
-                      name="cname"
-                      placeholder="Company Name"
-                    />
-                  </div> */}
-
+                  {!session && (
+                    <div className="form-group">
+                      <input
+                        required
+                        type="email"
+                        name="email"
+                        placeholder="Email address *"
+                        value={data.email}
+                        maxLength={100}
+                        onChange={(e) => handleInputChange(e, 'email')}
+                        className={errors.email ? "is-invalid" : ""}
+                      />
+                      {errors.email && <div className="invalid-feedback">{errors.email}</div>}
+                    </div>
+                  )}
                   <div className="form-group">
                     <input
                       type="text"
                       name="billing_address"
-                      required=""
+                      required
                       placeholder="Address *"
                       value={data.deliveryAdress.street}
-                      onChange={(e) => {
-                        setData({
-                          ...data,
-                          deliveryAdress: {
-                            ...data.deliveryAdress,
-                            street: e.target.value,
-                          },
-                        });
-                      }
-                      }
-
+                      maxLength={200}
+                      onChange={(e) => handleInputChange(e, 'street')}
+                      className={errors.street ? "is-invalid" : ""}
                     />
+                    {errors.street && <div className="invalid-feedback">{errors.street}</div>}
                   </div>
-                  {/* <div className="form-group">
-                    <input
-                      type="text"
-                      name="billing_address2"
-                      required=""
-                      placeholder="Address line2"
-
-                    />
-                  </div> */}
                   <div className="form-group">
                     <input
-                      required=""
+                      required
                       type="text"
                       name="city"
                       placeholder="City / Town *"
                       value={data.deliveryAdress.city}
-                      onChange={(e) => {
-                        setData({
-                          ...data,
-                          deliveryAdress: {
-                            ...data.deliveryAdress,
-                            city: e.target.value,
-                          },
-                        });
-                      }
-                      }
+                      maxLength={50}
+                      onChange={(e) => handleInputChange(e, 'city')}
+                      className={errors.city ? "is-invalid" : ""}
                     />
+                    {errors.city && <div className="invalid-feedback">{errors.city}</div>}
                   </div>
                   <div className="form-group">
                     <input
-                      required=""
+                      required
                       type="text"
                       name="state"
                       placeholder="State / County *"
                       value={data.deliveryAdress.state}
-                      onChange={(e) => {
-                        setData({
-                          ...data,
-                          deliveryAdress: {
-                            ...data.deliveryAdress,
-                            state: e.target.value,
-                          },
-                        });
-                      }
-                      }
-
+                      maxLength={50}
+                      onChange={(e) => handleInputChange(e, 'state')}
+                      className={errors.state ? "is-invalid" : ""}
                     />
+                    {errors.state && <div className="invalid-feedback">{errors.state}</div>}
                   </div>
                   <div className="form-group">
                     <input
-                      required=""
+                      required
                       type="text"
                       name="zipcode"
                       placeholder="Postcode / ZIP *"
                       value={data.deliveryAdress.zipCode}
-                      onChange={(e) => {
-                        setData({
-                          ...data,
-                          deliveryAdress: {
-                            ...data.deliveryAdress,
-                            zipCode: e.target.value,
-                          },
-                        });
-                      }
-                      }
-                      
+                      maxLength={4}
+                      onChange={(e) => handleInputChange(e, 'zipCode')}
+                      className={errors.zipCode ? "is-invalid" : ""}
                     />
+                    {errors.zipCode && <div className="invalid-feedback">{errors.zipCode}</div>}
                   </div>
-                  {/* <div className="form-group">
-                    <input
-                      required=""
-                      type="text"
-                      name="phone"
-                      placeholder="Phone *"
-                    />
-                  </div>
-                  <div className="form-group">
-                    <input
-                      required=""
-                      type="text"
-                      name="email"
-                      placeholder="Email address *"
-                    />
-                  </div> */}
-                  {/* <div
-                    id="collapsePassword"
-                    className="form-group create-account collapse in"
-                  >
-                    <input
-                      required=""
-                      type="password"
-                      placeholder="Password"
-                      name="password"
-                    />
-                  </div> */}
-                  {/* <div className="form-group">
-                    <div className="checkbox">
-                      <div className="custome-checkbox">
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          name="checkbox"
-                          id="createaccount"
-                        />
-                        <label
-                          className="form-check-label label_info"
-                          data-bs-toggle="collapse"
-                          href="#collapsePassword"
-                          data-target="#collapsePassword"
-                          aria-controls="collapsePassword"
-                          htmlFor="createaccount"
-                        >
-                          <span>Create an account?</span>
-                        </label>
-                      </div>
-                    </div>
-                  </div> */}
-
-                  <div className="ship_detail">
-                    <div className="form-group">
-                      {/* <div className="chek-form">
-                        <div className="custome-checkbox">
-                          <input
-                            className="form-check-input"
-                            type="checkbox"
-                            name="checkbox"
-                            id="differentaddress"
-                          />
-                          <label
-                            className="form-check-label label_info"
-                            data-bs-toggle="collapse"
-                            data-target="#collapseAddress"
-                            href="#collapseAddress"
-                            aria-controls="collapseAddress"
-                            htmlFor="differentaddress"
-                          >
-                            <span>Ship to a different address?</span>
-                          </label>
-                        </div>
-                      </div> */}
-                    </div>
-                    {/* <div
-                      id="collapseAddress"
-                      className="different_address collapse in"
-                    >
-                      <div className="form-group">
-                        <input
-                          type="text"
-                          required=""
-                          name="fname"
-                          placeholder="First name *"
-                        />
-                      </div>
-                      <div className="form-group">
-                        <input
-                          type="text"
-                          required=""
-                          name="lname"
-                          placeholder="Last name *"
-                        />
-                      </div>
-                      <div className="form-group">
-                        <input
-                          required=""
-                          type="text"
-                          name="cname"
-                          placeholder="Company Name"
-                        />
-                      </div>
-
-                      <div className="form-group">
-                        <input
-                          type="text"
-                          name="billing_address"
-                          required=""
-                          placeholder="Address *"
-                        />
-                      </div>
-                      <div className="form-group">
-                        <input
-                          type="text"
-                          name="billing_address2"
-                          required=""
-                          placeholder="Address line2"
-                        />
-                      </div>
-                      <div className="form-group">
-                        <input
-                          required=""
-                          type="text"
-                          name="city"
-                          placeholder="City / Town *"
-                        />
-                      </div>
-                      <div className="form-group">
-                        <input
-                          required=""
-                          type="text"
-                          name="state"
-                          placeholder="State / County *"
-                        />
-                      </div>
-                      <div className="form-group">
-                        <input
-                          required=""
-                          type="text"
-                          name="zipcode"
-                          placeholder="Postcode / ZIP *"
-                        />
-                      </div>
-                    </div> */}
-                  </div>
-                  {/* <div className="form-group mb-30">
-                    <textarea rows="5" placeholder="Order notes"></textarea>
-                  </div> */}
                   <input 
                     type="submit" 
                     value="Place Order"
@@ -608,25 +595,45 @@ const Cart = ({
                             </td>
                           </tr>
                         ))}
+
+                        {/* Add shipping cost row */}
+                        <tr>
+                          <td colSpan="2">
+                            <h4 className="text-white">Livraison</h4>
+                          </td>
+                          <td colSpan="2" className="text-end">
+                            {shippingCost() === 0 ? (
+                              <h4 className="text-brand">Gratuite</h4>
+                            ) : (
+                              <h4 className="text-brand">{shippingCost().toFixed(3)} TND</h4>
+                            )}
+                          </td>
+                        </tr>
+
+                        {/* Add total with shipping row */}
+                        <tr>
+                          <td colSpan="2">
+                            <h4 className="text-white">Total</h4>
+                          </td>
+                          <td colSpan="2" className="text-end">
+                            <h4 className="text-brand">{totalWithShipping().toFixed(3)} TND</h4>
+                          </td>
+                        </tr>
+
+                        {/* Show shipping threshold notice */}
+                        {price() < 150 && price() > 0 && (
+                          <tr>
+                            <td colSpan="4" className="text-center">
+                              <p className="text-xs text-muted">
+                                Livraison gratuite à partir de 150 TND d'achat
+                              </p>
+                            </td>
+                          </tr>
+                        )}
                       </tbody>
                     </table>
                   </div>
-                  <div
-                    style={{
-                      display: "flex",
-                    }}
-                  >
-                    {/* <button
-                      href="#"
-                      className="btn btn-fill-out btn-block mt-30"
-                      style={{ margin: "auto" }}
-                      type="submit"
-                      onClick={handleSubmi}
-                    >
-                      Place Order
-                    </button> */}
-                    
-                  </div>
+                  {/* ...existing code... */}
                 </div>
               </div>
             </div>

@@ -28,6 +28,15 @@ const Cart = ({
         return price;
     };
 
+    const shippingCost = () => {
+        const subtotal = price();
+        return subtotal > 150 ? 0 : 7;
+    };
+
+    const totalWithShipping = () => {
+        return price() + shippingCost();
+    };
+
     return (
       <>
         <section className="mt-50 mb-50">
@@ -507,7 +516,16 @@ const Cart = ({
                               <td className="cart_total_label text-gray-100">Livraison</td>
                               <td className="cart_total_amount text-gray-100">
                                 <i className="ti-gift mr-5"></i>
-                                Livraison gratuite
+                                {shippingCost() === 0 ? (
+                                  "Livraison gratuite"
+                                ) : (
+                                  <span>{shippingCost().toFixed(3)} TND</span>
+                                )}
+                                {price() < 150 && price() > 0 && (
+                                  <div className="text-xs mt-1">
+                                    Livraison gratuite à partir de 150 TND d'achat
+                                  </div>
+                                )}
                               </td>
                             </tr>
                             <tr>
@@ -515,7 +533,7 @@ const Cart = ({
                               <td className="cart_total_amount">
                                 <strong>
                                   <span className="font-xl fw-900 text-brand">
-                                    {price().toFixed(3)} TND
+                                    {totalWithShipping().toFixed(3)} TND
                                   </span>
                                 </strong>
                               </td>

@@ -7,7 +7,8 @@ const SDGItem = ({ data }) => {
   return (
     <div className="sdg-item rounded-2xl bg-[#1e3f35] h-full border-4 group hover:border-[#f36420]">
       <div className="main md:p-10 p-8 flex flex-col items-center h-full">
-        <Icon className="text-6xl text-slate-100" />
+        {/* <Icon className="text-6xl text-slate-100" /> */}
+        <img src={`/assets/images/${data.icon}`} style={{height:'80px'}} alt="" />
         <strong className="heading5 mt-6 text-white text-shadow-hover">{data.title}</strong>
         <p className="service-desc text-white text-center mt-3 text-shadow-hover">{data.description}</p>
       </div>
